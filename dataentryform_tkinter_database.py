@@ -164,34 +164,43 @@ class RegistrationForm:
 
          # validation
     def validation(self):
-        name = self.name_entry.get()
-        valid_name=r"([a-zA-Z])"
-        if not re.match(name,valid_name):
-            tkinter.messagebox.showwarning("Error","Invalid Name, Please Enter Correct Name")
-            return False
+    # Validate name (letters and spaces only)
+    name = self.name_entry.get()
+    valid_name = r"^[a-zA-Z\s]+$"
+    if not re.match(valid_name, name):
+        tkinter.messagebox.showwarning("Error", "Invalid Name. Please enter a valid name (letters only).")
+        return False
 
-        email = self.email_entry.get()
-        valid_email=r"(^[a-zA-Z]+@[0-9+.-*]+[@gmail.ccom])"
-        if not re.match(email,valid_email):
-            tkinter.messagebox.showwarning("Error","Invalid email format, Please Enter a valid email")
-            return False
-        phone = self.phone_entry.get()
-        valid_phone=r"([0-9]\d{10}$)"
-        if not re.match(phone,valid_phone):
-            tkinter.messagebox.showwarning("Error","Invalid Phone Number, Please Enter a Valid Phone Number")
-            return False
+    # Validate email (general email format)
+    email = self.email_entry.get()
+    valid_email = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if not re.match(valid_email, email):
+        tkinter.messagebox.showwarning("Error", "Invalid email format. Please enter a valid email.")
+        return False
 
-        username =  self.username_entry.get()
-        valid_username=r"([a-zA-Z]+[0-9]+$)"
-        if not re.match(username,valid_username):
-            tkinter.messagebox.showwarning("Error","Invalid Username, Please Enter Correct Username")
-            return False
-        password = self.password_entry.get()
-        valid_password=r"((?=.*[a-zA-Z])(?=.*[@/-~!@#$%^&*()_+.><,/\|])(?=*\d{8,20}))"
-        if not re.match(password,valid_password):
-            tkinter.messagebox.showwarning("Error","Invalid Password, Please Enter Correct Name")
-            return False
-        return True
+    # Validate phone number (10 digits)
+    phone = self.phone_entry.get()
+    valid_phone = r"^\d{10}$"
+    if not re.match(valid_phone, phone):
+        tkinter.messagebox.showwarning("Error", "Invalid Phone Number. Please enter a valid 10-digit phone number.")
+        return False
+
+    # Validate username (alphanumeric only)
+    username = self.username_entry.get()
+    valid_username = r"^[a-zA-Z0-9]+$"
+    if not re.match(valid_username, username):
+        tkinter.messagebox.showwarning("Error", "Invalid Username. Only alphanumeric characters are allowed.")
+        return False
+
+    # Validate password (8+ characters, one letter, one number, one special character)
+    password = self.password_entry.get()
+    valid_password = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+    if not re.match(valid_password, password):
+        tkinter.messagebox.showwarning("Error", "Invalid Password. Must be 8+ characters, with at least one letter, one number, and one special character.")
+        return False
+
+    return True  # All validations passed
+
 
 
 
