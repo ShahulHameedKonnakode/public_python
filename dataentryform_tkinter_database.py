@@ -8,7 +8,7 @@ import re
 
 
 class Database:
-    def __init__(self,db_name):
+    def _init_(self,db_name):
         self.connection = sqlite3.connect(db_name)
         self.cursor=self.connection.cursor()
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -34,7 +34,7 @@ class Database:
         self.connection.commit()
 
 class RegistrationForm:
-    def __init__(self,root,db):
+    def _init_(self,root,db):
         self.root = root
         self.db = db
         self.setup_ui()
@@ -164,44 +164,64 @@ class RegistrationForm:
 
          # validation
     def validation(self):
-    # Validate name (letters and spaces only)
-    name = self.name_entry.get()
-    valid_name = r"^[a-zA-Z\s]+$"
-    if not re.match(valid_name, name):
-        tkinter.messagebox.showwarning("Error", "Invalid Name. Please enter a valid name (letters only).")
-        return False
+        name = self.name_entry.get()
+        valid_name=r"^[a-zA-Z\s]+$"
+        if not re.match(name,valid_name):
+            tkinter.messagebox.showwarning("Error","Invalid Name, Please Enter Correct Name")
+            return False
 
-    # Validate email (general email format)
-    email = self.email_entry.get()
-    valid_email = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if not re.match(valid_email, email):
-        tkinter.messagebox.showwarning("Error", "Invalid email format. Please enter a valid email.")
-        return False
+        email = self.email_entry.get()
+        valid_email=r"(^[a-zA-Z]+@[0-9+.-*]+[@gmail.ccom])"
+        if not re.match(email,valid_email):
+            tkinter.messagebox.showwarning("Error","Invalid email format, Please Enter a valid email")
+            return False
+        phone = self.phone_entry.get()
+        valid_phone=r"([0-9]\d{10}$)"
+        if not re.match(phone,valid_phone):
+            tkinter.messagebox.showwarning("Error","Invalid Phone Number, Please Enter a Valid Phone Number")
+            return False
 
-    # Validate phone number (10 digits)
-    phone = self.phone_entry.get()
-    valid_phone = r"^\d{10}$"
-    if not re.match(valid_phone, phone):
-        tkinter.messagebox.showwarning("Error", "Invalid Phone Number. Please enter a valid 10-digit phone number.")
-        return False
+        username =  self.username_entry.get()
+        valid_username=r"([a-zA-Z]+[0-9]+$)"
+        if not re.match(username,valid_username):
+            tkinter.messagebox.showwarning("Error","Invalid Username, Please Enter Correct Username")
+            return False
+        password = self.password_entry.get()
+        valid_password=r"((?=.[a-zA-Z])(?=.[@/-~!@#$%^&()_+.><,/\|])(?=\d{8,20}))"
+        if not re.match(password,valid_password):
+            tkinter.messagebox.showwarning("Error","Invalid Password, Please Enter Correct Name")
+            return False
+        return True
+    
+    def validation_updation(self):
+        name = self.update_name_entry.get()
+        valid_name=r"^[a-zA-Z\s]+$"
+        if not re.match(name,valid_name):
+            tkinter.messagebox.showwarning("Error","Invalid Name, Please Enter Correct Name")
+            return False
 
-    # Validate username (alphanumeric only)
-    username = self.username_entry.get()
-    valid_username = r"^[a-zA-Z0-9]+$"
-    if not re.match(valid_username, username):
-        tkinter.messagebox.showwarning("Error", "Invalid Username. Only alphanumeric characters are allowed.")
-        return False
+        email = self.update_email_entry.get()
+        valid_email=r"(^[a-zA-Z]+@[0-9+.-*]+[@gmail.ccom])"
+        if not re.match(email,valid_email):
+            tkinter.messagebox.showwarning("Error","Invalid email format, Please Enter a valid email")
+            return False
+        phone = self.update_phone_entry.get()
+        valid_phone=r"([0-9]\d{10}$)"
+        if not re.match(phone,valid_phone):
+            tkinter.messagebox.showwarning("Error","Invalid Phone Number, Please Enter a Valid Phone Number")
+            return False
 
-    # Validate password (8+ characters, one letter, one number, one special character)
-    password = self.password_entry.get()
-    valid_password = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-    if not re.match(valid_password, password):
-        tkinter.messagebox.showwarning("Error", "Invalid Password. Must be 8+ characters, with at least one letter, one number, and one special character.")
-        return False
-
-    return True  # All validations passed
-
-
+        username =  self.update_username_entry.get()
+        valid_username=r"([a-zA-Z]+[0-9]+$)"
+        if not re.match(username,valid_username):
+            tkinter.messagebox.showwarning("Error","Invalid Username, Please Enter Correct Username")
+            return False
+        password = self.update_password_entry.get()
+        valid_password=r"((?=.[a-zA-Z])(?=.[@/-~!@#$%^&()_+.><,/\|])(?=\d{8,20}))"
+        if not re.match(password,valid_password):
+            tkinter.messagebox.showwarning("Error","Invalid Password, Please Enter Correct Name")
+            return False
+        return True
 
 
 
@@ -262,15 +282,15 @@ class RegistrationForm:
             tkinter.messagebox.showerror("Invalid", "Enter a valid id!")
 
 class Menus:
-    def __init__(self,root):
+    def _init_(self,root):
         self.menubar=Menu(root)
         root.config(menu=self.menubar)
         self.filemenu=Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="File",menu=self.filemenu)
         
-        self.filemenu.add_command(label='Register', command="")
-        self.filemenu.add_command(label='Update', command='')
-        self.filemenu.add_command(label='Delete')
+        self.filemenu.add_command(label='Register', command=self.register_user)
+        self.filemenu.add_command(label='Update', command=self.updation)
+        self.filemenu.add_command(label='Delete', command=self.delete_user)
         self.filemenu.add_command(label='Exit',command=root.destroy)
 
         self.editmenu=Menu(self.menubar, tearoff=0)
